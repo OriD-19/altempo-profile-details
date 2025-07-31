@@ -1,11 +1,45 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AccountDetailCard from './AccountDetailCard'
 import { Input } from '../inputs/TextInput'
 import { SocialMediaInput } from '../inputs/SocialMediaInput'
 import PaymentAccount from './PaymentAccount'
 import PaymentAccountsManagement from './PaymentAccountsManagement'
+import AddElementInput from '../inputs/AddElementInput'
+import { Modal } from '../modals/Modal'
+import AddPaymentAccountModal from '../../pages/ProfileDetails/components/AddPaymentAccountModal'
 
 const AccountDetails = () => {
+    const [paymentAccounts, setPaymentAccounts] = useState([
+        {
+            name: "Cuenta Paypal",
+            details: "paypal.me/jim.h88",
+            isMain: true,
+        },
+        {
+            name: "Cuenta de Banco",
+            details: "Banco Agrícola ****9812",
+            isMain: false,
+        },
+        {
+            name: "Cuenta de Banco",
+            details: "Banco Pro Credit ****0933",
+            isMain: false,
+        }
+    ]);
+
+    const [isNewPaymentOpened, setIsNewPaymentOpened] = useState(false);
+
+    // hard-coded data, just to test that the workflow
+    const handleSaveNewAccount = () => {
+        setPaymentAccounts(prev => [...prev, {
+            name: "Cuenta de PayPal",
+            details: "paypal.me/manolito.429",
+            isMain: false,
+        }]);
+        setIsNewPaymentOpened(false);
+    }
+
+
     return (
         <div className="border-gray-200 border-1 rounded-xl w-full">
             <AccountDetailCard
@@ -56,12 +90,23 @@ const AccountDetails = () => {
                 title={"Datos de pago"}
                 subtitle={"Actualiza la información de donde deseas recibir tus pagos y las cuentas a las cuales abonaremos tu ganancia"}
                 isBottomCard={true}
+                vertical={true}
             >
                 <PaymentAccountsManagement>
-                    <PaymentAccount accountName="Cuenta Paypal" accountDetails="paypal.me/jim.h88" isMainAccount={true}/>
-                    <PaymentAccount accountName="Cuenta de Banco" accountDetails={"Banco Agrícola ****9812"}/>
-                    <PaymentAccount accountName="Cuenta de Banco" accountDetails={"Banco Pro Credit ****0933"} isBottom={true}/>
+                    {paymentAccounts.map((account, index) => (
+                        <PaymentAccount accountName={account.name} accountDetails={account.details} isMainAccount={account.isMain} isBottom={paymentAccounts.length - 1 === index} />
+                    ))}
                 </PaymentAccountsManagement>
+                <AddElementInput addItemText={"Añadir Cuenta"} openModal={setIsNewPaymentOpened}/>
+
+                <Modal isOpen={isNewPaymentOpened}
+                    onClose={() => setIsNewPaymentOpened(false)}
+                    onSave={handleSaveNewAccount}
+                    title="Nueva cuenta de pago"
+                >
+                    <AddPaymentAccountModal />
+                </Modal>
+
             </AccountDetailCard>
         </div>
     )

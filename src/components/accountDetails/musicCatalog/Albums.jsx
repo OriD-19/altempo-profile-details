@@ -1,9 +1,10 @@
 import React from 'react'
 import Album from './Album';
 import AddElementInput from '../../inputs/AddElementInput';
+import { Modal } from '../../modals/Modal';
+import { Input } from '../../inputs/TextInput';
 
-const Albums = ({ type, albums }) => {
-
+const Albums = ({ type, albums, isAlbumModalOpened, setIsAlbumModalOpened, handleAlbumSave }) => {
 
     if (type === "ep") {
         return (
@@ -14,7 +15,19 @@ const Albums = ({ type, albums }) => {
                         index === albums.length - 1 ? <Album albumTitle={album} isBottom={true} /> : <Album albumTitle={album} />
                     ))}
                 </div>
-                <AddElementInput addItemText={"Añadir EP"} />
+                <AddElementInput addItemText={"Añadir EP"} openModal={setIsAlbumModalOpened} />
+                <Modal
+                    isOpen={isAlbumModalOpened}
+                    onClose={() => setIsAlbumModalOpened(false)}
+                    onSave={handleAlbumSave}
+                    title={"Nuevo EP"}
+                >
+
+                    <div className="flex flex-col gap-2">
+                        <Input label="Nuevo EP" value="Dolido pero no arrepentido" />
+                    </div>
+
+                </Modal>
             </div>
         )
 
@@ -27,7 +40,17 @@ const Albums = ({ type, albums }) => {
                     index === albums.length - 1 ? <Album albumTitle={album} isBottom={true} /> : <Album albumTitle={album} />
                 ))}
             </div>
-            <AddElementInput addItemText={"Añadir álbum"} />
+            <AddElementInput addItemText={"Añadir álbum"} openModal={setIsAlbumModalOpened} />
+            <Modal
+                isOpen={isAlbumModalOpened}
+                onClose={() => setIsAlbumModalOpened(false)}
+                onSave={handleAlbumSave}
+                title={"Nuevo álbum"}
+            >
+                <div className="flex flex-col gap-2">
+                    <Input label="Nuevo Álbum" value="Quest for Fire" />
+                </div>
+            </Modal>
 
         </div>
     )

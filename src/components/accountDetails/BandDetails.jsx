@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AccountDetailCard from './AccountDetailCard'
 import { Input } from '../inputs/TextInput'
 import { SocialMediaInput } from '../inputs/SocialMediaInput'
@@ -10,24 +10,47 @@ import MusicTag from '../tags/MusicTags'
 import AddElementInput from '../inputs/AddElementInput'
 import Albums from './musicCatalog/Albums'
 import Singles from './musicCatalog/Singles'
+import { Modal } from '../modals/Modal'
 
 const BandDetails = () => {
 
     const bio = "This is a sample biography. This includes detailed account of a person's life, written by another person. It typically covers the individual's life history achievements, experiences, and significant events."
-    const musicGenres = [
+
+    const [isAlbumsModalOpened, setIsAlbumsModalOpened] = useState(false);
+    const [isGenreModalOpened, setIsGenreModalOpened] = useState(false);
+    const [isSingleModalOpened, setIsSingleModalOpened] = useState(false);
+    const [isEpModalOpened, setIsEpModalOpened] = useState(false);
+
+    const [musicGenres, setMusicGenres] = useState([
         "Clasica",
         "Romántica",
         "Rock",
         "Balada",
         "Bolero",
         "Ranchera",
-    ];
+    ]);
 
-    const albums = [
+    const [albums, setAlbums] = useState([
         "Territorio de Esperanza",
         "Cerca y lejos",
         "Los cielos",
-    ];
+    ]);
+
+    const [eps, setEps] = useState([
+        "Territorio de Esperanza",
+        "Cerca y lejos",
+        "Los cielos",
+    ]);
+
+    const handleAlbumSave = () => {
+        setAlbums(prev => [...prev, "Carlitos y sus amigos"]);
+        setIsAlbumsModalOpened(false);
+    }
+
+    const handleEpSave = () => {
+        setEps(prev => [...prev, "Carlitos y sus ex-amigos"]);
+        setIsEpModalOpened(false);
+    }
 
     return (
         <div className="border-gray-200 border-1 rounded-xl w-full">
@@ -61,6 +84,14 @@ const BandDetails = () => {
                     </div>
                     <AddElementInput addItemText={"Añadir Género"} />
                 </div>
+                <Modal
+                    isOpen={isGenreModalOpened}
+                    onClose={() => setIsGenreModalOpened(false)}
+                    onSave={() => handleGenreSave}
+                    title={"Nuevo género musical"}
+                >
+
+                </Modal>
             </AccountDetailCard>
 
             <AccountDetailCard
@@ -69,9 +100,24 @@ const BandDetails = () => {
                 isBottomCard={true}
             >
                 <div className="flex flex-col w-full gap-4">
-                    <Albums albums={albums}/>
-                    <Singles />
-                    <Albums type="ep" albums={albums}/>
+                    <Albums
+                        albums={albums}
+                        handleAlbumSave={handleAlbumSave}
+                        isAlbumModalOpened={isAlbumsModalOpened}
+                        setIsAlbumModalOpened={setIsAlbumsModalOpened}
+                    />
+                    <Singles
+                        isModalOpened={isSingleModalOpened}
+                        setIsModalOpened={setIsSingleModalOpened}
+                        albums={albums}
+                    />
+                    <Albums
+                        type="ep"
+                        albums={albums}
+                        handleAlbumSave={handleEpSave}
+                        isAlbumModalOpened={isEpModalOpened}
+                        setIsAlbumModalOpened={setIsEpModalOpened}
+                    />
                 </div>
             </AccountDetailCard>
         </div>
