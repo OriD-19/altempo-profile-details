@@ -4,7 +4,7 @@ const UploadImage = () => {
   return (
     <div className="flex flex-row gap-2 items-center">
         <div className="rounded-xl">
-            <img className="rounded-xl aspect-square max-w-[100px]" src="./public/pfp.webp" alt="Profile Picture" />
+            <img className="rounded-xl aspect-square max-w-[100px]" src="./pfp.webp" alt="Profile Picture" />
         </div>
         <div className="flex flex-col">
             <button className="border-1 mb-2 border-gray-400 rounded-full p-2 cursor-pointer">Actualiza foto</button>
